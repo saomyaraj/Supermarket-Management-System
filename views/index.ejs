@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Login</h1>
+      <p>Please enter your ID and password</p>
+      <form action="/loginbyadmin" method="post">
+        <input type="text" name="ID" placeholder="ID" class="no-spinner">
+        <input type="password" name="password" placeholder="Password"><br>
+
+          <% if (error) { %>
+            <p id="ERROR"><%= error %></p>
+        <% } %>
+
+        <button type="submit">Log in</button>
+
+      </form>
+    </div>
+
+  </body>
+</html>
