@@ -65,9 +65,9 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
     margin: 0;
 }
 button{
+  margin-top: 20px;
   padding: 10px 15px;
   width: 40%;
-  margin-top: 40px;
   background-color: #332D2D;
   border: none;
   outline: none;
@@ -77,6 +77,7 @@ button{
   -8px -8px 12px 0 rgba(56, 56, 56, 0.3);
   border-radius: 10px;
   font-size: 15px;
+  align-self: center;
 
 
 }
@@ -87,6 +88,10 @@ button{
 
 #ERROR{
   font-size: 13px;
-  margin-bottom: -10px;
+  margin-top: -10px;
+  margin-bottom: 0px;
   color: rgb(200, 6, 6);
+}
+#pass{
+  margin-bottom: 50px;
 }

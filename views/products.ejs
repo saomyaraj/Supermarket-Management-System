@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheets/dashboard.css">
+    <link rel="stylesheet" href="/stylesheets/products.css">
+    <title>Document</title>
+</head>
+<body class="collapsed">
+    <% include navbar.ejs %>
+    <div class="main">
+        <div class="heading">
+            <h2>Manage Products</h2>
+        </div>
+        <div class="products">
+            <div class="elements">
+                <input type="text" name="" id="searchInput" placeholder="Search Products">
+                <div class="createbuttons">
+                    <button id="Createcategory">Create Category</button>
+                    <button id="addNewProductBtn">Add New Product</button>
+                </div>
+            </div>
+            <div class="table">
+                <div class="categorybox">
+                    <p>Create Category</p>
+                    <input type="text" id="Categoryinput" placeholder="Category Name"/><br>
+                    <button id="Cancelbtn">Cancel</button>
+                    <button id="entercategory">Enter</button>
+                </div>
+                <table id="#1">
+                    <thead>
+                        <tr>
+                            <th id="productname">Product Name</th>
+                            <th>Category</th>
+                            <th>SKU</th>
+                            <th>Quantity</th>
+                            <th>Cost</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- <tr>
+                            <td>Tomato</td>
+                            <td>Food</td>
+                            <td>SJ-101</td>
+                            <td>85</td>
+                            <td>45$</td>
+                            <td>60$</td>
+                            <td>
+                                <button id="actionbtn">Edit</button>
+                                <button id="actionbtn">Delete</button>
+                            </td>
+                        </tr> -->
+                        <% results.forEach(function(product){ %>
+                            <tr>
+                                <td><%= product.PRODUCT_NAME %></td>
+                                <td><%= product.CATEGORY_NAME %></td>
+                                <td id="PRODUCT_ID"><%= product.PRODUCT_ID %></td>
+                                <td><%= product.STOCK %></td>
+                                <td><%= product.COST_PRICE %>$</td>
+                                <td><%= product.SELLING_PRICE %>$</td>
+                                <td>
+                                    <button class="actionbtn">Edit</button>
+                                    <button class="actionbtn" id="dltbtn">Delete</button>
+                                </td>
+                                
+
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+<script src="/javascripts/products.js">
+</script>
+</body>
+</html>

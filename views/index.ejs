@@ -11,14 +11,15 @@
     <div class="container">
       <h1>Login</h1>
       <p>Please enter your ID and password</p>
-      <form action="/loginbyadmin" method="post">
+      <form action="/adminlogin" method="post">
         <input type="text" name="ID" placeholder="ID" class="no-spinner">
-        <input type="password" name="password" placeholder="Password"><br>
+        <input type="password" name="password" placeholder="Password" id="pass"><br>
 
           <% if (error) { %>
             <p id="ERROR"><%= error %></p>
-        <% } %>
-
+        <% } else {%>
+          <p></p>
+          <% } %>
         <button type="submit">Log in</button>
 
       </form>
