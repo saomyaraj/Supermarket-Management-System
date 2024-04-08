@@ -18,6 +18,7 @@ catch(err){
 
 /* GET home page. */
 router.get('/adminlogin', function(req, res, next) {
+  console.log(req.session)
   res.render('index', { title: 'Express',error:'' });
 });
 
@@ -38,9 +39,13 @@ router.post('/adminlogin', function(req, res) {
       const role = results[0].EMP_ROLE;
       console.log('User logged in successfully with role',role);
       if(role === 'ADMIN'){
+        req.session.userId = `${EMP_ID}`;
+        req.session.role = `${role}`
         res.redirect('/dashboard')
       }
       else{
+        req.session.userId = `${EMP_ID}`;
+        req.session.role = `${role}`
 
       res.redirect('/counter'); 
 
@@ -55,22 +60,94 @@ router.post('/adminlogin', function(req, res) {
   });
 });
 
-router.get('/dashboard', function(req,res,next){
-  res.render('dashboard')
-})
-router.get('/counter', function(req,res,next){
+router.get('/dashboard', isLoggedIn, isAdmin, function(req, res, next) {
+  connection.beginTransaction(function(err) {
+      if (err) {
+          console.log("Error starting transaction:", err);
+          return res.status(500).send('Internal Server Error');
+      }
+
+      // Variables to store counts
+      let employeeCount, productCount, customerCount;
+
+      // Query to get employee count
+      connection.query('SELECT COUNT(*) as employeeCount FROM EMPLOYEE', function(error, results, fields) {
+          if (error) {
+              console.error('Error getting employee count:', error);
+              return connection.rollback(function() {
+                  res.status(500).send('Internal Server Error');
+              });
+          }
+          employeeCount = results[0].employeeCount; // Assign employee count
+          checkCounts(); // Check if all counts are obtained
+      });
+
+      // Query to get product count
+      connection.query('SELECT COUNT(*) as productCount FROM PRODUCT', function(error, results, fields) {
+          if (error) {
+              console.error('Error getting product count:', error);
+              return connection.rollback(function() {
+                  res.status(500).send('Internal Server Error');
+              });
+          }
+          productCount = results[0].productCount; // Assign product count
+          checkCounts(); // Check if all counts are obtained
+      });
+
+      // Query to get customer count
+      connection.query('SELECT COUNT(*) as customerCount FROM CUSTOMER', function(error, results, fields) {
+          if (error) {
+              console.error('Error getting customer count:', error);
+              return connection.rollback(function() {
+                  res.status(500).send('Internal Server Error');
+              });
+          }
+          customerCount = results[0].customerCount; // Assign customer count
+          checkCounts(); // Check if all counts are obtained
+      });
+
+      // Function to check if all counts are obtained and render the response
+      function checkCounts() {
+          if (employeeCount !== undefined && productCount !== undefined && customerCount !== undefined) {
+              // All counts obtained, render the response
+              res.render('dashboard', { employeeCount: employeeCount, productCount: productCount, customerCount: customerCount });
+          }
+      }
+  });
+});
+
+router.get('/counter',isLoggedIn, function(req,res,next){
   res.render('counter')
 })
-router.get('/products',function(req,res){
-  connection.query("SELECT P.PRODUCT_ID,P.PRODUCT_NAME,C.CATEGORY_NAME,P.COST_PRICE,P.SELLING_PRICE,P.STOCK FROM PRODUCT P JOIN CATEGORY C ON P.CATEGORY_ID = C.CATEGORY_ID;",function(error,results,fields){
-    console.log(JSON.stringify(results))
-    // results.forEach(function(products){
-    //   console.log(products.PRODUCT_NAME)
-    // })
-    
-    res.render('products',{results:results})
+router.get('/products',isLoggedIn,isAdmin,function(req,res){
+  let result;
+  let categories;
+  connection.beginTransaction((err)=>{
+    if(err){
+      console.log(err)
+    }
+    connection.query("SELECT P.PRODUCT_ID,P.PRODUCT_NAME,C.CATEGORY_NAME,P.COST_PRICE,P.SELLING_PRICE,P.STOCK FROM PRODUCT P JOIN CATEGORY C ON P.CATEGORY_ID = C.CATEGORY_ID;",function(error,results,fields){
+      result = results;
+      if (error) {
+        console.error('Error deleting employee from EMPLOYEE_LOGIN:', error);
+        return connection.rollback(function() {
+            res.status(500).send('Internal Server Error');
+        });
+    }
+    connection.query("SELECT CATEGORY_NAME FROM CATEGORY",function(err,results,fields){
+      categories = results;
+      console.log(categories[0].CATEGORY_NAME)
+      res.render('products',{results:result,categories:categories})
 
+      
+    })
+    })
   })
+
+
+})
+router.post('/addproduct',function(req,res){
+  
 })
 // In your routes file (e.g., index.js)
 router.post('/addCategory', function(req, res, next) {
@@ -121,4 +198,84 @@ router.post('/deleteProduct', function(req, res, next) {
       }
   });
 });
+router.get('/employees',isLoggedIn,isAdmin,function(req,res){
+  connection.query('SELECT * FROM EMPLOYEE LEFT JOIN EMPLOYEE_MOBILE on EMPLOYEE.EMP_ID = EMPLOYEE_MOBILE.EMP_ID', function(error, results, fields) {
+
+    res.render('employees',{results:results})
+  });
+})
+router.post('/deleteEMP', function(req, res) {
+  const EMP_ID = req.body.EMP_ID;
+  console.log(EMP_ID); // Check if EMP_ID is provided
+  if (!EMP_ID) {
+      return res.status(400).send('EMP_ID is required');
+  }
+
+  connection.beginTransaction(function(err) {
+      if (err) {
+          console.log("Error starting transaction:", err);
+          return res.status(500).send('Internal Server Error');
+      }
+
+      // Delete from EMPLOYEE_LOGIN table
+      connection.query('DELETE FROM EMPLOYEE_LOGIN WHERE EMP_ID = ?', [EMP_ID], function(error, results, fields) {
+          if (error) {
+              console.error('Error deleting employee from EMPLOYEE_LOGIN:', error);
+              return connection.rollback(function() {
+                  res.status(500).send('Internal Server Error');
+              });
+          }
+
+          // Delete from EMPLOYEE_MOBILE table
+          connection.query('DELETE FROM EMPLOYEE_MOBILE WHERE EMP_ID = ?', [EMP_ID], function(error, results, fields) {
+              if (error) {
+                  console.error('Error deleting employee from EMPLOYEE_MOBILE:', error);
+                  return connection.rollback(function() {
+                      res.status(500).send('Internal Server Error');
+                  });
+              }
+
+              // Delete from EMPLOYEE table
+              connection.query('DELETE FROM EMPLOYEE WHERE EMP_ID = ?', [EMP_ID], function(error, results, fields) {
+                  if (error) {
+                      console.error('Error deleting employee from EMPLOYEE:', error);
+                      return connection.rollback(function() {
+                          res.status(500).send('Internal Server Error');
+                      });
+                  }
+
+                  // Commit the transaction if all queries succeed
+                  connection.commit(function(err) {
+                      if (err) {
+                          console.error('Error committing transaction:', err);
+                          return connection.rollback(function() {
+                              res.status(500).send('Internal Server Error');
+                          });
+                      }
+                      console.log('Transaction complete.');
+                      res.status(200).send('Transaction complete.');
+                  });
+              });
+          });
+      });
+  });
+});
+
+function isLoggedIn(req,res,next){
+  if(req.session.userId){
+    next()
+  }
+  else{
+    res.redirect('/adminlogin')
+  }
+}
+function isAdmin(req,res,next){
+  if(req.session.role === 'ADMIN'){
+    next()
+
+  }
+  else{
+    res.send("You are not authorized to view this page.")
+  }
+}
 module.exports = router;

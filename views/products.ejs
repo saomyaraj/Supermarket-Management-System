@@ -29,7 +29,58 @@
                     <p>Create Category</p>
                     <input type="text" id="Categoryinput" placeholder="Category Name"/><br>
                     <button id="Cancelbtn">Cancel</button>
-                    <button id="entercategory">Enter</button>
+                    <button id="entercategory">Add</button>
+                </div>
+                <div class="newProductBox">
+                    <p>Add Product</p>
+                    <div class="alloptions">
+                        <div class="options">
+                            <label for="">Product Name</label>
+                            <input type="text" name="" id="productname" placeholder="Name">
+                        </div>
+                        <div class="options">
+                            <label for="">Category</label>
+                            <select name="" id="categoryname" >
+                            <% categories.forEach(function(category){ %>
+                                <option value=""><%= category.CATEGORY_NAME %></option>
+
+                            <% }); %>
+                                
+                            </select>
+
+                        </div>
+                        <div class="options">
+                            <label for="">SKU</label>
+                            <input type="text" placeholder="SKU ID" id="sku">
+                        </div>
+                        <div class="options">
+                            <label for="">Quantity</label>
+                            <input type="number"  placeholder="Qty" min="1" id="qty">
+                        </div>
+                        <div class="options">
+                            <label for="">Cost</label>
+                            <input type="number"  placeholder="Cost" min="1" id="cost">
+                        </div>
+                        <div class="options">
+                            <label for="">Price</label>
+                            <input type="number"  placeholder="Price" min="1" id="price">
+                        </div>
+                        <div class="btndiv">
+                            <button id="addproduct">Add</button>
+                            <button id="Cancelbtn2">Cancel</button>
+                        </div>
+                    </div>
+
+
+<!-- 
+                    <label for="">SKU</label>
+                    <label for="">Quantity</label>
+                    <label for="">Cost</label>
+                    <label for="">Price</label> -->
+                    
+
+
+
                 </div>
                 <table id="#1">
                     <thead>

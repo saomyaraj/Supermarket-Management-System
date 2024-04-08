@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/employees.css">
+</head>
+<body class="collapsed">
+    <% include navbar.ejs %>
+    <div class="main">
+        <div class="heading">
+            <h2>Manage Employees</h2>
+        </div>
+        <div class="products">
+            <div class="elements">
+                <input type="text" name="" id="searchInput" placeholder="Search Employee">
+                <div class="createbuttons">
+                    <!-- <button id="Createcategory">Create Category</button> -->
+                    <button id="addNewProductBtn">Add New Employee</button>
+                </div>
+            </div>
+            <div class="table">
+
+                <table id="#1">
+                    <thead>
+                        <tr>
+                            <th id="productname">EMPLOYEE ID</th>
+                            <th>FIRST NAME</th>
+                            <th>LAST NAME</th>
+                            <th>GENDER</th>
+                            <th>SALARY</th>
+                            <th>MOBILE</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+
+                        <% results.forEach(function(employee){ %>
+                            <tr>
+                                <td id="EMP_ID"><%= employee.EMP_ID %></td>
+                                <td><%= employee.FIRST_NAME %></td>
+                                <td ><%= employee.LAST_NAME %></td>
+                                <td><%= employee.EMP_GENDER %></td>
+                                <td><%= employee.EMP_SALARY %>$</td>
+                                <td><%= employee.EMP_MOBILE %></td>
+
+                                <td>
+                                    <button class="actionbtn">Edit</button>
+                                    <button class="actionbtn" id="dltbtn">Delete</button>
+                                </td>
+                                
+
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/javascripts/employees.js"></script>
+</body>
+</html>

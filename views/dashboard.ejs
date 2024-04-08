@@ -9,21 +9,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 </head>
-<body>
+<body >
 <% include navbar.ejs %>
-    <!-- <div class="welcome">
-        <h2>Welcome Back</h2>
-    </div> -->
+<div class="main">
+    <div class="heading">
+        <h2>Dashboard</h2>
+    </div>
+    <div class="products">
+        <div class="elements">
+            <input type="text" name="" id="searchInput" placeholder="Search">
+            <div class="createbuttons">
+                <button id="">Today</button>
+                <button id="">This Month</button>
+                <!-- <button id="calendar"><i class="fas fa-calendar"></i> Select Date</button> -->
+            </div>
+        </div>
+        <div class="dashelems">
+            <div class="box">
+                <p>Total Sales</p>
+                <h1>$3210.00</h1>
+            </div>
+            <div class="box">
+                <p> Profit</p>
+                <h1>$500.00</h1>
 
+            </div>
+            <div class="box">
+                <p>Employees</p>
+                <h1 id="totalemp"><%= employeeCount %></h1>
+            </div>
+            <div class="box">
+                <p>Products</p>
+                <h1><%= productCount %></h1>
+            </div>
+            <div class="box">
+                <p>Customers</p>
+                <h1><%= customerCount %></h1>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<script src="/javascripts/dashboard.js"></script>
 </body>
 </html>
 
-<!-- <div class="navbar">
-    <h3>Store</h3>
-    <p>Dashboard</p>
-    <p>Analytics</p>
-    <p> <a href="/products">Products</a></p>
-    <p>Categories</p>
-    <p>Customers</p>
-
-</div> -->

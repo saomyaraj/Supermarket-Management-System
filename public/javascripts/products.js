@@ -1,25 +1,60 @@
 document.getElementById('addNewProductBtn').addEventListener('click', function() {
     // Create a new row
-    var newRow = document.createElement('tr');
+    document.querySelector('.newProductBox').classList.add("show");
+
+    // var newRow = document.createElement('tr');
+    
+    // // Add input fields to the row
+    // newRow.innerHTML = `
+    //     <td><input type="text" placeholder="Product Name"></td>
+    //     <td><input type="text" placeholder="Category"></td>
+    //     <td><input type="text" placeholder="SKU"></td>
+    //     <td><input type="text" placeholder="Quantity"></td>
+    //     <td><input type="text" placeholder="Cost"></td>
+    //     <td><input type="text" placeholder="Price"></td>
+    //     <td>
+    //         <button class="saveBtn">Save</button>
+    //         <button class="cancelBtn">Cancel</button>
+    //     </td>
+    // `;
+    
+    // Append the new row to the table body
+    // document.getElementById('productTableBody').appendChild(newRow);
+});
+document.getElementById('Cancelbtn2').addEventListener('click',function(){
+    document.querySelector('.newProductBox').classList.remove("show");
+})
+document.getElementById('addproduct').addEventListener('click',function(){
+    const productname = document.getElementById('productname').value
+    const categoryname = document.getElementById('categoryname')
+    const selectedIndex = categoryname.selectedIndex;
+    const selectedOption = categoryname.options[selectedIndex];
+    const selectedText = selectedOption.innerText;
+    const sku = document.getElementById('sku').value
+    const qty = document.getElementById('qty').value
+    const cost = document.getElementById('cost').value
+    const price = document.getElementById('price').value
+    
+        var newRow = document.createElement('tr');
     
     // Add input fields to the row
     newRow.innerHTML = `
-        <td><input type="text" placeholder="Product Name"></td>
-        <td><input type="text" placeholder="Category"></td>
-        <td><input type="text" placeholder="SKU"></td>
-        <td><input type="text" placeholder="Quantity"></td>
-        <td><input type="text" placeholder="Cost"></td>
-        <td><input type="text" placeholder="Price"></td>
+        <td>${productname}</td>
+        <td>${selectedText}</td>
+        <td>${sku}</td>
+        <td>${qty}</td>
+        <td>${cost}</td>
+        <td>${price}</td>
         <td>
-            <button class="saveBtn">Save</button>
-            <button class="cancelBtn">Cancel</button>
+        <button id="actionbtn">Edit</button>
+        <button id="actionbtn">Delete</button>
         </td>
     `;
     
     // Append the new row to the table body
     document.getElementById('productTableBody').appendChild(newRow);
-});
 
+})
 // Event listener for Save button click
 document.getElementById('productTableBody').addEventListener('click', function(event) {
     if (event.target.classList.contains('saveBtn')) {
@@ -41,10 +76,10 @@ document.getElementById('productTableBody').addEventListener('click', function(e
 
 
 document.getElementById('Createcategory').addEventListener('click',function(){
-    document.querySelector('.categorybox').style.display = 'block';
+    document.querySelector('.categorybox').classList.add('show');
 })
 document.querySelector('#Cancelbtn').addEventListener('click',function(){
-    document.querySelector('.categorybox').style.display = 'none';
+    document.querySelector('.categorybox').classList.remove('show');
 
 })
 document.querySelector('#entercategory').addEventListener('click',function(){
