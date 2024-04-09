@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
+    </script>
+
 </head>
 <body >
 <% include navbar.ejs %>
@@ -28,6 +31,9 @@
             <div class="box">
                 <p>Total Sales</p>
                 <h1>$3210.00</h1>
+                <div class="widget">
+                    <canvas id="chart"></canvas>
+                </div>
             </div>
             <div class="box">
                 <p> Profit</p>

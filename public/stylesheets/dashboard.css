@@ -106,7 +106,7 @@ body.collapsed .main {
     background: #555; /* Color of the scrollbar handle on hover */
 }
 .box {
-    width: 300px;
+    width: 340px;
     height: 270px;
     background-color: #ffffff;
     border: 1px solid #cfcece;
@@ -118,4 +118,23 @@ body.collapsed .main {
     font-size: 16px;
     font-weight: 550;
     margin-bottom: 7px;
+}
+.widget {
+    font-family: 'Work Sans', sans-serif;
+    
+    border-radius: 0.75rem;
+    /* background-color: #3b2d2d; */
+    padding: 1rem;
+    /* max-width: 40rem; */
+    width: 100%;
+    
+    /* width: 5rem; */
+}
+
+.widget canvas {
+    margin-left
+    : -20px;
+    margin-top: 10px;
+    height: 10rem;
+    /* color: #eeeded */
 }

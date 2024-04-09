@@ -66,8 +66,9 @@
                             <input type="number"  placeholder="Price" min="1" id="price">
                         </div>
                         <div class="btndiv">
-                            <button id="addproduct">Add</button>
                             <button id="Cancelbtn2">Cancel</button>
+                            <button id="addproduct">Add</button>
+
                         </div>
                     </div>
 
@@ -125,7 +126,17 @@
                         <% }); %>
                     </tbody>
                 </table>
-
+                <div class="notification">
+                    <div class="notification__body">
+                        <img
+                            src="images/check-circle.svg"
+                            alt="Success"
+                            class="notification__icon"
+                        >
+                        <p id="notiP"></p> 
+                    </div>
+                    <div class="notification__progress"></div>
+                </div>
             </div>
 
         </div>

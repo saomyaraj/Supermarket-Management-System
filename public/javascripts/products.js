@@ -24,37 +24,62 @@ document.getElementById('addNewProductBtn').addEventListener('click', function()
 document.getElementById('Cancelbtn2').addEventListener('click',function(){
     document.querySelector('.newProductBox').classList.remove("show");
 })
-document.getElementById('addproduct').addEventListener('click',function(){
-    const productname = document.getElementById('productname').value
-    const categoryname = document.getElementById('categoryname')
+document.getElementById('addproduct').addEventListener('click', function() {
+    const productname = document.getElementById('productname').value;
+    const categoryname = document.getElementById('categoryname');
     const selectedIndex = categoryname.selectedIndex;
     const selectedOption = categoryname.options[selectedIndex];
     const selectedText = selectedOption.innerText;
-    const sku = document.getElementById('sku').value
-    const qty = document.getElementById('qty').value
-    const cost = document.getElementById('cost').value
-    const price = document.getElementById('price').value
-    
-        var newRow = document.createElement('tr');
-    
-    // Add input fields to the row
-    newRow.innerHTML = `
-        <td>${productname}</td>
-        <td>${selectedText}</td>
-        <td>${sku}</td>
-        <td>${qty}</td>
-        <td>${cost}</td>
-        <td>${price}</td>
-        <td>
-        <button id="actionbtn">Edit</button>
-        <button id="actionbtn">Delete</button>
-        </td>
-    `;
-    
-    // Append the new row to the table body
-    document.getElementById('productTableBody').appendChild(newRow);
+    const sku = document.getElementById('sku').value;
+    const qty = document.getElementById('qty').value;
+    const cost = document.getElementById('cost').value;
+    const price = document.getElementById('price').value;
 
-})
+    let isnull = false;
+    const items = [productname, selectedText, sku, qty, cost, price];
+    items.forEach(function(item) {
+        if (item === '') {
+            isnull = true;
+        }
+    });
+
+    if (isnull) {
+        alert("Please fill in all the fields");
+    } else {
+        fetch('/addproduct', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productname: productname, selectedText: selectedText, sku: sku, qty: qty, cost: cost, price: price })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Category added successfully, you can handle the response here
+                    function addrow(){
+                        document.getElementById('notiP').innerText = `Your product has been added 🚀`;
+
+                        document.querySelector('.notification').style.display = 'block';
+                        document.querySelector('.newProductBox').classList.remove("show");
+                        setTimeout(()=>{
+                            window.location.reload();
+                        },1500)
+                    }
+                    addrow();
+
+
+                } else {
+                    // Handle errors
+                    alert("Error adding product. Please try again later.");
+                }
+            })
+            .catch(error => {
+                // Handle network errors
+                console.error('Error adding product:', error);
+                alert("Network error. Please try again later.");
+            });
+    }
+});
 // Event listener for Save button click
 document.getElementById('productTableBody').addEventListener('click', function(event) {
     if (event.target.classList.contains('saveBtn')) {
@@ -101,6 +126,9 @@ document.querySelector('#entercategory').addEventListener('click',function(){
         if (response.ok) {
             // Category added successfully, you can handle the response here
             document.querySelector('.categorybox').style.display = 'none';
+            document.getElementById('notiP').innerText = 'Your category has been added 🚀';
+            document.querySelector('.notification').style.display = 'block';
+
 
         } else {
             // Handle errors

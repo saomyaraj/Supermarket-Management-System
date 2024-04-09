@@ -1,7 +1,7 @@
 const ctx = document.getElementById("chart");
 
-Chart.defaults.color = "#00000";
-Chart.defaults.font.family = "Work Sans";
+Chart.defaults.color = "#FFF";
+Chart.defaults.font.family = "Poppins";
 
 new Chart(ctx, {
   type: "line",
@@ -23,7 +23,7 @@ new Chart(ctx, {
     datasets: [
       {
         label: "Monthly Income",
-        data: [2235, 3250, 1890, 5400, 2240, 6254,  2325, 4856, 1325, 2254, 3000, 3486],
+        data: [2235, 3250, 1890, 5400, 20240, 6254,  12325, 4856, 10325, 2254, 22356, 8486],
         backgroundColor: "white",
         borderColor: "#3DA06E",
         borderRadius: 6,
@@ -51,26 +51,26 @@ new Chart(ctx, {
       },
       title: {
         display: true,
-        text: "",
+        text: "Your Income",
         padding: {
-          bottom: 14,
+          bottom: 16,
         },
         font: {
-          size: 1,
+          size: 16,
           weight: "normal",
         },
       },
       tooltip: {
-        backgroundColor: "#2B2B2B",
-        bodyColor: "#fff",
+        backgroundColor: "#FDCA49",
+        bodyColor: "#0E0A03",
         yAlign: "bottom",
         cornerRadius: 4,
-        titleColor: "#fff",
+        titleColor: "#0E0A03",
         usePointStyle: true,
         callbacks: {
           label: function(context) {
               if (context.parsed.y !== null) {
-                const label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(context.parsed.y);
+                const label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
                 return label;
               }
               return null;
@@ -80,11 +80,8 @@ new Chart(ctx, {
     },
     scales: {
       x: {
-        grid: {
-            color: "#eeeded",
-          },
         border: {
-          dash: [0],
+          dash: [2, 4],
         },
         title: {
           text: "2023",
@@ -92,18 +89,17 @@ new Chart(ctx, {
       },
       y: {
         grid: {
-          color: "#eeeded",
+          color: "#27292D",
         },
         border: {
-          dash: [0],
+          dash: [2, 4],
         },
     
         title: {
-          display: false,
+          display: true,
           text: "Income [$]",
         },
       },
     },
-
   },
 });

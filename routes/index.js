@@ -60,7 +60,7 @@ router.post('/adminlogin', function(req, res) {
   });
 });
 
-router.get('/dashboard', isLoggedIn, isAdmin, function(req, res, next) {
+router.get('/dashboard', function(req, res, next) {
   connection.beginTransaction(function(err) {
       if (err) {
           console.log("Error starting transaction:", err);
@@ -146,9 +146,51 @@ router.get('/products',isLoggedIn,isAdmin,function(req,res){
 
 
 })
-router.post('/addproduct',function(req,res){
-  
-})
+router.post('/addproduct', function(req, res) {
+  const productname = req.body.productname;
+  const selectedText = req.body.selectedText;
+  const sku = req.body.sku;
+  const qty = req.body.qty;
+  const cost = req.body.cost;
+  const price = req.body.price;
+  let categoryID;
+
+  connection.beginTransaction(function(err) {
+      if (err) {
+          console.log("Error starting transaction:", err);
+          return res.status(500).send('Internal Server Error');
+      }
+
+      connection.query("SELECT CATEGORY_ID from CATEGORY WHERE CATEGORY_NAME = ?", [selectedText], function(err, results, fields) {
+          if (err) {
+              console.log(err);
+              connection.rollback();
+              return res.status(500).send('Internal Server Error');
+          }
+          categoryID = results[0].CATEGORY_ID;
+          console.log(categoryID);
+
+          connection.query("INSERT INTO PRODUCT (PRODUCT_ID, PRODUCT_NAME, CATEGORY_ID, COST_PRICE, SELLING_PRICE, STOCK) VALUES (?, ?, ?, ?, ?, ?)", [sku, productname, categoryID, cost, price, qty], function(err, results, fields) {
+              if (err) {
+                  console.log('Error adding product to database:', err);
+                  connection.rollback();
+                  return res.status(500).send('Internal Server Error');
+              }
+
+              // Commit the transaction
+              connection.commit(function(err) {
+                  if (err) {
+                      console.log('Error committing transaction:', err);
+                      return res.status(500).send('Internal Server Error');
+                  }
+                  console.log('Transaction complete.');
+                  res.status(200).send('Product added successfully!');
+
+              });
+          });
+      });
+  });
+});
 // In your routes file (e.g., index.js)
 router.post('/addCategory', function(req, res, next) {
   const categoryName = req.body.categoryName;
