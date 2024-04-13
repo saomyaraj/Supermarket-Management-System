@@ -1,24 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Charts</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/counter.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
-    </script>
+    <link rel="stylesheet" href="stylesheets/counter.css">
+    <title>Document</title>
 </head>
+<body class="collapsed">
+    <% include navbar2.ejs %>
+    <div class="main">
+        <div class="heading">
+            <h1>Billing</h1>
+        </div>
+        <div class="products">
+            <div class="elements">
+                <!-- <img src="images/search-icon.webp" alt=""> -->
+                <h1>Customer Details</h1>
 
-<body>
-    <div class="widget">
-        <canvas id="chart"></canvas>
+                <div id="existingcustomerdiv">
+                    <input id="existingcustomer" placeholder=" Customer's Mobile" type="text" pattern="[0-9]{10}" title="Please enter a phone number in the format XXXXXXXXXX" oninput="this.value = this.value.replace(/[^0-9]/g, '')"></input>
+                    <div class="img" id="searchicon">
+                        <img src="images/images.png" alt="" id="">
+                    </div>
+                </div>
+                <button id="addnewcustomer">Add New Customer</button>
+                <div class="newCustomerBox">
+                    <p>Add Customer</p>
+                    <div class="alloptions">
+                        <div class="options">
+                            <label for="">Customer ID</label>
+                            <input type="text" readonly name="" id="newcustID" placeholder="ID">
+                        </div>
+                        <div class="options">
+                            <label for="">Customer Name</label>
+                            <input type="text" name="" id="newcustName" placeholder="Name">
+        
+        
+                        </div>
+                        <div class="options">
+                            <label for="">Mobile No</label>
+                            <input type="text" placeholder="MobileNo" id="custMobileNo">
+                        </div>
+                        <div class="btndiv">
+                            <button id="Cancelbtn2">Cancel</button>
+                            <button id="addcustomer">Add</button>
+        
+                        </div>
+                    </div>
+                </div>
+                <div class="existingcustomerbox">
+                    <p>Existing Customer</p>
+                    <div class="custdet">
+                        <p id="custID"></p>
+                        <p id="custName"></p>
+                        <p id="custPhone"></p>
+                    </div>
+
+                    <button id="Cancelbtn">Next</button>
+
+                </div>
+
+            </div>
+            <div class="elements" id="elements2">
+                <h1>Order Details</h1>
+                <div class="items">
+                    <!-- <div class="item">
+                        <div class="firstitempart">
+                            <button id="addqtybtn">+</button>
+                            <h2>1. Apple</h2>
+                            <p>SKU: 3232424</p>
+                        </div>
+                        <div class="seconditempart">
+                            <p>1 X 54$</p>
+                            <p>54$</p>
+                        </div>
+
+                    </div> -->
+                </div>
+                <div class="sku">
+                    <input type="number" id="cartqty" min="1" placeholder="Qty" value="1">
+                    <input type="text" id="skucart" placeholder="SKU ID">
+                    <button id="addbtn">ADD</button>
+                </div>
+                <div class="sku" id="sku2">
+                    <button>Clear</button>
+                    <button>Generate Receipt</button>
+                    <h1 id="total">0$</h1>
+                </div>
+            </div>
+
+
+    
+        </div>
+
+ 
+
+
     </div>
+
+
     <script src="javascripts/counter.js"></script>
 </body>
-
 </html>

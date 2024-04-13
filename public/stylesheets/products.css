@@ -128,7 +128,7 @@ td {
     text-transform: uppercase;
 }
 th, td{
-    border-top: 1px solid #ccc; /* Top border */
+    /* border-top: 1px solid #ccc; Top border */
     border-bottom: 1px solid #ccc; /* Bottom border */
     padding-top: 15px ;
     padding-bottom: 15px;

@@ -1,105 +1,154 @@
-const ctx = document.getElementById("chart");
 
-Chart.defaults.color = "#FFF";
-Chart.defaults.font.family = "Poppins";
+document.getElementById('addnewcustomer').addEventListener('click',function(){
+    fetch('/custID')
+    .then(response => response.json())
+    .then(data=>{
+        document.getElementById('newcustID').value = data;
 
-new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ],
-    datasets: [
-      {
-        label: "Monthly Income",
-        data: [2235, 3250, 1890, 5400, 20240, 6254,  12325, 4856, 10325, 2254, 22356, 8486],
-        backgroundColor: "white",
-        borderColor: "#3DA06E",
-        borderRadius: 6,
-        cubicInterpolationMode: 'monotone',
-        fill: false,
-        borderSkipped: false,
-      },
-    ],
-  },
-  options: {
-    interaction: {
-      intersect: false,
-      mode: 'index'
-    },
-    elements: {
-      point:{
-          radius: 0
-      }
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: "Your Income",
-        padding: {
-          bottom: 16,
-        },
-        font: {
-          size: 16,
-          weight: "normal",
-        },
-      },
-      tooltip: {
-        backgroundColor: "#FDCA49",
-        bodyColor: "#0E0A03",
-        yAlign: "bottom",
-        cornerRadius: 4,
-        titleColor: "#0E0A03",
-        usePointStyle: true,
-        callbacks: {
-          label: function(context) {
-              if (context.parsed.y !== null) {
-                const label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                return label;
-              }
-              return null;
-          }
-        }
-      },
-    },
-    scales: {
-      x: {
-        border: {
-          dash: [2, 4],
-        },
-        title: {
-          text: "2023",
-        },
-      },
-      y: {
-        grid: {
-          color: "#27292D",
-        },
-        border: {
-          dash: [2, 4],
-        },
-    
-        title: {
-          display: true,
-          text: "Income [$]",
-        },
-      },
-    },
-  },
+    })
+
+    document.querySelector('.newCustomerBox').classList.add('show')
 });
+document.getElementById('Cancelbtn2').addEventListener('click',function(){
+    document.querySelector('.newCustomerBox').classList.remove('show')
+});
+
+
+
+document.getElementById('searchicon').addEventListener('click',function(){
+    const MobileNo = document.getElementById("existingcustomer").value;
+    console.log("mobileno",MobileNo)
+
+    if(MobileNo === ""){
+        alert("Please enter a Mobile No")
+    }
+    else{
+        fetch('/searchCustomer',{
+            method: 'POST',
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body: JSON.stringify({
+                MobileNo : MobileNo
+            })
+        }).then(response => response.json())
+        .then(data=>{
+           console.log(data[0].C_NAME)  
+
+           document.getElementById('custID').innerText = 'Customer ID :         '+data[0].C_ID
+           document.getElementById('custName').innerText = 'Customer Name :        '+data[0].C_NAME
+           document.getElementById('custPhone').innerText = 'Customer PhoneNo :       '+data[0].C_MOBILE
+           document.querySelector('.existingcustomerbox').classList.add('show2')
+
+        }
+
+        )
+    }
+})
+document.getElementById('Cancelbtn').addEventListener('click',function(){
+    document.querySelector('.existingcustomerbox').classList.remove('show2')
+})
+
+
+document.getElementById('addcustomer').addEventListener('click', function () {
+    const custID = document.getElementById('newcustID').value;
+    const custName = document.getElementById('newcustName').value;
+    const custMobileNo = document.getElementById('custMobileNo').value;
+
+    fetch('/addCustomer', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            C_ID: custID,
+            C_NAME: custName,
+            C_MOBILE: custMobileNo
+        })
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("done")
+            }
+            else {
+                alert("error")
+            }
+        })
+        .catch(error => {
+            // Handle network errors
+            console.error('Error adding product:', error);
+            alert("Network error. Please try again later.");
+        });
+});
+
+let count = 1;
+let total = 0;
+
+document.getElementById('addbtn').addEventListener('click', function () {
+    const skuID = document.getElementById('skucart').value;
+    var qty = document.getElementById('cartqty').value;
+    const items = document.querySelector('.items');
+    fetch('/itemDetail', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            skuID: skuID
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const item = document.createElement('div');
+            item.classList.add('item');
+            
+            const firstitempart = document.createElement('div');
+            firstitempart.classList.add('firstitempart');
+            
+            const btn = document.createElement('button');
+            btn.setAttribute('id', 'addqtybtn');
+            btn.textContent = '+';
+
+            
+            const name = document.createElement('h2');
+            name.textContent = `${count}. ${data[0].PRODUCT_NAME}`;
+            count = count + 1;
+            
+            const skup = document.createElement('p');
+            skup.textContent = `SKU: ${data[0].PRODUCT_ID}`;
+            
+            const seconditempart = document.createElement('div');
+            seconditempart.classList.add('seconditempart');
+            
+            const qtyprice = document.createElement('p');
+            qtyprice.textContent = `${qty} X ${data[0].SELLING_PRICE}$`;
+            
+            const itempricet = document.createElement('p');
+            itempricet.textContent = `${qty * data[0].SELLING_PRICE}$`;
+            total = total + qty*data[0].SELLING_PRICE
+            document.getElementById('total').textContent = `${total}$`
+
+            
+            items.appendChild(item);
+            item.appendChild(firstitempart);
+            firstitempart.append(btn, name, skup);
+            item.appendChild(seconditempart);
+            seconditempart.append(qtyprice, itempricet);
+
+            btn.addEventListener('click',function(){
+                qty = parseInt(qty) + 1;
+                qtyprice.textContent = `${qty} X ${data[0].SELLING_PRICE}$`;
+                itempricet.textContent = `${qty * data[0].SELLING_PRICE}$`;
+                total = total + qty*data[0].SELLING_PRICE
+                document.getElementById('total').textContent = `${total}$`
+
+
+            })
+        })
+        .catch(error => {
+            // Handle network errors
+            console.error('Error adding product:', error);
+            alert("Network error. Please try again later.");
+        });
+})

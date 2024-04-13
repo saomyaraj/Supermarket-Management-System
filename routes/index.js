@@ -25,6 +25,7 @@ router.get('/adminlogin', function(req, res, next) {
 router.post('/adminlogin', function(req, res) {
   const EMP_ID = req.body.ID;
   const password = req.body.password;
+  
   // console.log(ID);
 
   connection.query('SELECT EMP_ID, PASSWORD, EMP_ROLE FROM EMPLOYEE_LOGIN WHERE EMP_ID = ? AND PASSWORD = ?', [EMP_ID, password], function (error, results, fields) {
@@ -60,7 +61,7 @@ router.post('/adminlogin', function(req, res) {
   });
 });
 
-router.get('/dashboard', function(req, res, next) {
+router.get('/dashboard',isLoggedIn,isAdmin, function(req, res, next) {
   connection.beginTransaction(function(err) {
       if (err) {
           console.log("Error starting transaction:", err);
@@ -116,7 +117,7 @@ router.get('/dashboard', function(req, res, next) {
   });
 });
 
-router.get('/counter',isLoggedIn, function(req,res,next){
+router.get('/counter', function(req,res,next){
   res.render('counter')
 })
 router.get('/products',isLoggedIn,isAdmin,function(req,res){
@@ -225,6 +226,22 @@ router.post('/addCategory', function(req, res, next) {
   });
 });
 
+router.get('/custID',function(req,res){
+  connection.query('SELECT C_ID FROM CUSTOMER ORDER BY C_ID DESC LIMIT 1',function(error,results,fields){
+    if (error) {
+      console.error('Error retrieving last category ID:', error);
+      res.status(500).send('Internal Server Error');
+      return;
+  }
+  let lastCustId = 'C100';
+  if (results.length > 0) {
+    lastCustId = results[0].C_ID;
+  }
+  let nextCustId = 'C' + (parseInt(lastCustId.substr(1)) + 1);
+  res.json(`${nextCustId}`);
+
+})});
+
 router.post('/deleteProduct', function(req, res, next) {
   const productId = req.body.productId; // Assuming the product ID is sent in the request body
 
@@ -320,4 +337,50 @@ function isAdmin(req,res,next){
     res.send("You are not authorized to view this page.")
   }
 }
+
+router.get('/counter',function(req,res){
+  res.render('counter')
+})
+
+router.post('/searchCustomer',function(req,res){
+  const MobileNo = req.body.MobileNo
+  console.log(MobileNo)
+  connection.query('SELECT * FROM CUSTOMER WHERE C_MOBILE = ?',[MobileNo],function(error,results,fields){
+    if (error) {
+      console.error('Error deleting product:', error);
+      res.status(500).send('Internal Server Error'); // Send a 500 status code if there's an error
+  } else {
+      console.log(results[0]);
+      res.send(results); // Send a success response
+  }
+  })
+})
+
+router.post('/addCustomer', function(req, res) {
+  const C_ID = req.body.C_ID;
+  const C_NAME = req.body.C_NAME.toUpperCase();
+  const C_MOBILE = req.body.C_MOBILE;
+
+  connection.query('INSERT INTO CUSTOMER VALUES (?,?,?)', [C_ID, C_NAME, C_MOBILE], function(error, results, fields) {
+      if (error) {
+          console.log(error);
+          res.status(500).send('Failed to add customer. Please try again later.'); // Sending an error response to the client
+      } else {
+          res.status(200).send('Customer added successfully.'); // Sending a success response to the client
+      }
+  });
+});
+
+router.post('/itemDetail',function(req,res){
+  const skuID = req.body.skuID
+  connection.query('SELECT * FROM PRODUCT WHERE PRODUCT_ID = ?',[skuID],function(error,results,fields){
+    if (error) {
+      console.error('Error deleting product:', error);
+      res.status(500).send('Internal Server Error'); // Send a 500 status code if there's an error
+  } else {
+      console.log(results[0]);
+      res.send(results); // Send a success response
+  }
+  })
+})
 module.exports = router;

@@ -18,7 +18,7 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  background-color: #332D2D;
+  background-color: #303030;
   width: 450px;
   height: 600px;
   border-radius: 15px;
@@ -50,7 +50,7 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
   /* border: 1px solid rgb(120, 120, 120); */
   border: none;
   outline: none;
-  background-color: #332D2D;
+  background-color: #303030;
   color: white;
   font-size: 16px;
   border-radius: 10px;
@@ -64,11 +64,14 @@ background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 
     -webkit-appearance: none;
     margin: 0;
 }
+.container input:hover{
+  background-color: #333333;
+}
 button{
   margin-top: 20px;
   padding: 10px 15px;
   width: 40%;
-  background-color: #332D2D;
+  background-color: #303030;
   border: none;
   outline: none;
   color: white;
@@ -79,6 +82,10 @@ button{
   font-size: 15px;
   align-self: center;
 
+
+}
+button:hover{
+  background-color: #333333;
 
 }
 

@@ -22,6 +22,9 @@ body.collapsed .main {
     left: 70px;
     width: calc(100% - 70px)/* Adjust the left position when sidebar is collapsed */
 }
+body.collapsed .box{
+    /* width: 380px; */
+}
 .main h2{
     font-weight: 600;
     font-size: 21px;
