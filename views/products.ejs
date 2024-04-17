@@ -113,11 +113,11 @@
                                 <td><%= product.PRODUCT_NAME %></td>
                                 <td><%= product.CATEGORY_NAME %></td>
                                 <td id="PRODUCT_ID"><%= product.PRODUCT_ID %></td>
-                                <td><%= product.STOCK %></td>
-                                <td><%= product.COST_PRICE %>$</td>
-                                <td><%= product.SELLING_PRICE %>$</td>
+                                <td id="stock"><%= product.STOCK %></td>
+                                <td id="cost"><%= product.COST_PRICE %>$</td>
+                                <td id="price"><%= product.SELLING_PRICE %>$</td>
                                 <td>
-                                    <button class="actionbtn">Edit</button>
+                                    <button class="actionbtn" id="editbtn">Edit</button>
                                     <button class="actionbtn" id="dltbtn">Delete</button>
                                 </td>
                                 

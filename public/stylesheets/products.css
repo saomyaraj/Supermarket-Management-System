@@ -135,10 +135,10 @@ th, td{
     
 }
 td input{
-    padding: 10px 5px;
+    padding: 0px 0px;
     height: 10px;
-    box-sizing: border-box;
-    width: 100%;
+    /* box-sizing: border-box; */
+    width: 100px;
 }
 /* #penicon{
     text-align: center;

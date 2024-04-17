@@ -196,3 +196,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+// Add event listeners to all "Edit" buttons
+// Add event listener to the table
+document.querySelector('table').addEventListener('click', function(event) {
+    const button = event.target;
+    if (button && button.id === 'editbtn') {
+        handleEditButtonClick(button);
+    }
+});
+
+// Function to handle click on Edit button
+function handleEditButtonClick(button) {
+    const row = button.closest('tr');
+    const Pid = row.querySelector('#PRODUCT_ID').innerHTML;
+    const costCell = row.querySelector('#cost');
+    const qtyCell = row.querySelector('#stock');
+    const priceCell = row.querySelector("#price");
+
+    // Replace text content with input fields
+    costCell.innerHTML = `<input class='editRow' type="text" value="${costCell.textContent}" min="1">`;
+    qtyCell.innerHTML = `<input class='editRow' type="text" value="${qtyCell.textContent}" min="1">`;
+    priceCell.innerHTML = `<input class='editRow' type="text" value="${priceCell.textContent}" min="1">`;
+
+    button.textContent = 'Save';
+    button.id = 'saveProductbtn'; // Change the id if needed
+
+    // Add click event listener to the Save button
+    document.querySelector('table').addEventListener('click', handleSaveButtonClick);
+
+    function handleSaveButtonClick(event) {
+        if (event.target && event.target.id === 'saveProductbtn') {
+            const newCost = row.querySelector('#cost input').value;
+            const newPrice = row.querySelector("#price input").value;
+            const newQty = row.querySelector('#stock input').value;
+
+            fetch('/updateProductDetails', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newCost: newCost, newPrice: newPrice, newQty: newQty, Pid: Pid })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Successful response, handle accordingly
+                    button.textContent = 'Edit';
+                    button.id = 'editbtn';
+                    costCell.textContent = newCost;
+                    qtyCell.textContent = newQty;
+                    priceCell.textContent = newPrice;
+                    document.getElementById('notiP').innerText = 'Your product has been updated 🚀';
+                    document.querySelector('.notification').style.display = 'block';
+
+                    // Remove Save button click event listener
+                    document.querySelector('table').removeEventListener('click', handleSaveButtonClick);
+                } else {
+                    throw new Error('Failed to update product details');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating product details:', error);
+            });
+        }
+    }
+}

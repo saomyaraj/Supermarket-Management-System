@@ -14,7 +14,7 @@ document.getElementById('Cancelbtn2').addEventListener('click',function(){
 });
 
 
-
+let customerID;
 document.getElementById('searchicon').addEventListener('click',function(){
     const MobileNo = document.getElementById("existingcustomer").value;
     console.log("mobileno",MobileNo)
@@ -34,8 +34,9 @@ document.getElementById('searchicon').addEventListener('click',function(){
         }).then(response => response.json())
         .then(data=>{
            console.log(data[0].C_NAME)  
-
+            
            document.getElementById('custID').innerText = 'Customer ID :         '+data[0].C_ID
+           customerID = data[0].C_ID
            document.getElementById('custName').innerText = 'Customer Name :        '+data[0].C_NAME
            document.getElementById('custPhone').innerText = 'Customer PhoneNo :       '+data[0].C_MOBILE
            document.querySelector('.existingcustomerbox').classList.add('show2')
@@ -45,8 +46,22 @@ document.getElementById('searchicon').addEventListener('click',function(){
         )
     }
 })
+let nextOid;
 document.getElementById('Cancelbtn').addEventListener('click',function(){
-    document.querySelector('.existingcustomerbox').classList.remove('show2')
+    fetch('/getOrderID')
+    .then(response => response.json())
+    .then(data=>{
+        console.log(data[0].ORDER_ID)
+        nextOid = parseInt(data[0].ORDER_ID.substr(1)) + 1;
+        nextOid = 'O' + nextOid.toString().padStart(3, '0'); // Assuming you want the order ID to have at least 3 digits
+        console.log(nextOid);
+        document.getElementById('orderId').style.fontStyle = 'italic';
+
+        document.getElementById('orderId').textContent = 'Order' + ' #'+ nextOid ;
+
+    })      
+    document.getElementById('custid').textContent  = document.getElementById('custID').innerText.substr(13)
+    // document.querySelector('.existingcustomerbox').classList.remove('show2')
 })
 
 
@@ -54,6 +69,7 @@ document.getElementById('addcustomer').addEventListener('click', function () {
     const custID = document.getElementById('newcustID').value;
     const custName = document.getElementById('newcustName').value;
     const custMobileNo = document.getElementById('custMobileNo').value;
+    
 
     fetch('/addCustomer', {
         method: 'POST',
@@ -68,7 +84,10 @@ document.getElementById('addcustomer').addEventListener('click', function () {
     })
         .then(response => {
             if (response.ok) {
+
                 console.log("done")
+                document.getElementById('custid').textContent  = custID
+
             }
             else {
                 alert("error")
@@ -79,6 +98,7 @@ document.getElementById('addcustomer').addEventListener('click', function () {
             console.error('Error adding product:', error);
             alert("Network error. Please try again later.");
         });
+
 });
 
 let count = 1;
@@ -152,3 +172,49 @@ document.getElementById('addbtn').addEventListener('click', function () {
             alert("Network error. Please try again later.");
         });
 })
+document.getElementById('generateReceipt').addEventListener('click', function() {
+    if(customerID === ''){
+        alert("Please register the customer")
+    }
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Months are zero-based (0 = January)
+    const day = today.getDate();
+    
+    // Format the date as desired (e.g., YYYY-MM-DD)
+    const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    
+    console.log("Today's date:", formattedDate);
+    fetch('/addOrderDetails', 
+    {method:'POST',
+    headers:{'Content-Type': 'application/json'},
+    body: JSON.stringify({
+        customerID:customerID,
+        total:total,
+        nextOid:nextOid,
+        date: formattedDate
+    })
+    })
+    .then(response => {
+        if (response.ok) {
+
+            console.log("done")
+            window.location.href = `/payment?orderID=${nextOid}`
+
+
+        }
+        else {
+            alert("error")
+        }
+    })
+    .catch(error => {
+        // Handle network errors
+        console.error('Error adding product:', error);
+        alert("Network error. Please try again later.");
+    });
+
+
+});
+
+
+

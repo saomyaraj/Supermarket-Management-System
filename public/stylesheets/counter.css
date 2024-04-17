@@ -35,6 +35,8 @@ body.collapsed .box{
     border-bottom: 1px solid rgb(184, 184, 184);
     padding: 0px 40px;
     padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
 }
 .products{
     display: flex;
@@ -66,6 +68,11 @@ body.collapsed .box{
     background-color:#2B2B2B ;
     color: white;
     cursor: pointer;
+}
+#custid{
+    position: absolute;
+    left: 92.5%;
+    top: 8%;
 }
 .createbuttons{
     /* background-color: #2B2B2B; */
@@ -447,4 +454,16 @@ body.collapsed .box{
     text-align: right;
     transform: translateX(180px);
     align-self: center;
+}
+#orderId{
+    position: absolute;
+    left: 52%;
+    top: 8%;
+
+}
+
+#sku2 button:hover{
+    background-color: white;
+    color: #2B2B2B;
+
 }

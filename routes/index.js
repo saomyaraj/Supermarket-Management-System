@@ -118,7 +118,7 @@ router.get('/dashboard',isLoggedIn,isAdmin, function(req, res, next) {
 });
 
 router.get('/counter', function(req,res,next){
-  res.render('counter')
+  res.render('counter',{empid:req.session.userId})
 })
 router.get('/products',isLoggedIn,isAdmin,function(req,res){
   let result;
@@ -351,7 +351,14 @@ router.post('/searchCustomer',function(req,res){
       res.status(500).send('Internal Server Error'); // Send a 500 status code if there's an error
   } else {
       console.log(results[0]);
-      res.send(results); // Send a success response
+      if (results.length > 0) {
+        const customerId = results[0].C_ID; // Assuming the customer ID is retrieved from the database
+        req.session.customerId = customerId; // Set customer ID in session
+        res.send(results);
+    } else {
+        // Handle case when customer is not found
+        res.status(404).send('Customer not found');
+    }// Send a success response
   }
   })
 })
@@ -383,4 +390,56 @@ router.post('/itemDetail',function(req,res){
   }
   })
 })
+router.get('/getOrderID',function(req,res){
+  connection.query('SELECT ORDER_ID from ORDERS ORDER BY ORDER_ID DESC LIMIT 1',function(error,results,fields){
+    res.json(results);
+    
+  })
+  
+})
+router.get('/payment',function(req,res){
+  const orderID = req.query.orderID;
+  console.log(orderID)
+  res.render('payment')
+})
+router.post('/addOrderDetails',function(req,res){
+  const customerID = req.body.customerID;
+  const amount = req.body.total
+  const orderID = req.body.nextOid
+  const date = req.body.date
+  connection.query('INSERT INTO ORDERS VALUES (?,?,?,?)',[orderID,customerID,amount,date],function(error,results,fields){
+    if (error) {
+      console.error('Error inserting order:', error);
+      res.status(500).send('Internal Server Error'); // Send a 500 status code if there's an error
+  } else {
+      res.send(results); // Send a success response
+  }
+  })
+})
+
+router.post('/updateProductDetails', function(req, res) {
+  const newQty = req.body.newQty;
+  const newPriceStr = req.body.newPrice; // Price string in the format "100$"
+  const newCostStr = req.body.newCost;   // Cost string in the format "100$"
+  const Pid = req.body.Pid;
+
+  // Parse and convert price and cost strings to numbers
+  const newPrice = parseFloat(newPriceStr.replace('$', ''));
+  const newCost = parseFloat(newCostStr.replace('$', ''));
+
+  const sql = `UPDATE PRODUCT 
+               SET STOCK = ?, COST_PRICE = ?, SELLING_PRICE = ? 
+               WHERE PRODUCT_ID = ?`;
+
+  connection.query(sql, [newQty, newCost, newPrice, Pid], (err, result) => {
+      if (err) {
+          console.error('Error updating product details:', err);
+          res.status(500).send('Error updating product details');
+      } else {
+          console.log('Product details updated successfully');
+          res.sendStatus(200); // Send success status
+      }
+  });
+});
+
 module.exports = router;
