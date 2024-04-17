@@ -441,5 +441,8 @@ router.post('/updateProductDetails', function(req, res) {
       }
   });
 });
-
+router.post('/logout',function(req,res){
+  delete req.session.userId;
+  res.sendStatus(200);
+})
 module.exports = router;

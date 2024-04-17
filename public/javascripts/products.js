@@ -60,6 +60,9 @@ document.getElementById('addproduct').addEventListener('click', function() {
                         document.getElementById('notiP').innerText = `Your product has been added 🚀`;
 
                         document.querySelector('.notification').style.display = 'block';
+                        setTimeout(() => {
+                            document.querySelector('.notification').style.display = 'none';
+                        }, 3000);
                         document.querySelector('.newProductBox').classList.remove("show");
                         setTimeout(()=>{
                             window.location.reload();
@@ -125,9 +128,12 @@ document.querySelector('#entercategory').addEventListener('click',function(){
     .then(response => {
         if (response.ok) {
             // Category added successfully, you can handle the response here
-            document.querySelector('.categorybox').style.display = 'none';
+            document.querySelector('.categorybox').classList.remove('show');
             document.getElementById('notiP').innerText = 'Your category has been added 🚀';
             document.querySelector('.notification').style.display = 'block';
+            setTimeout(() => {
+                document.querySelector('.notification').style.display = 'none';
+            }, 3000);
 
 
         } else {
@@ -247,6 +253,9 @@ function handleEditButtonClick(button) {
                     priceCell.textContent = newPrice;
                     document.getElementById('notiP').innerText = 'Your product has been updated 🚀';
                     document.querySelector('.notification').style.display = 'block';
+                    setTimeout(() => {
+                        document.querySelector('.notification').style.display = 'none';
+                    }, 3000);
 
                     // Remove Save button click event listener
                     document.querySelector('table').removeEventListener('click', handleSaveButtonClick);
