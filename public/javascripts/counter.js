@@ -218,3 +218,4 @@ document.getElementById('generateReceipt').addEventListener('click', function() 
 
 
 
+

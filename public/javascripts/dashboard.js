@@ -134,7 +134,7 @@ new Chart(ctx2, {
     datasets: [
       {
         label: "Monthly Income",
-        data: [223, 325, 189, 540, 224, 625,  232, 485, 132, 225, 300, 348]
+        data: [210, 725, 189, 540, 914, 725,  932, 435, 532, 295, 390, 348]
         ,
         backgroundColor: "white",
         borderColor: "#3DA06E",
@@ -244,8 +244,8 @@ new Chart(ctx3, {
     ],
     datasets: [
       {
-        label: "Monthly Income",
-        data: [2235, 3250, 1890, 5400, 2240, 6254,  2325, 4856, 1325, 2254, 3000, 3486],
+        label: "Customers",
+        data: [2, 3, 7, 7, 9, 9,5,8,5,9,6],
         backgroundColor: "white",
         borderColor: "#3DA06E",
         borderRadius: 6,
@@ -289,15 +289,15 @@ new Chart(ctx3, {
         cornerRadius: 4,
         titleColor: "#fff",
         usePointStyle: true,
-        callbacks: {
-          label: function(context) {
-              if (context.parsed.y !== null) {
-                const label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
-                return label;
-              }
-              return null;
-          }
-        }
+        // callbacks: {
+        //   label: function(context) {
+        //       if (context.parsed.y !== null) {
+        //         const label = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+        //         return label;
+        //       }
+        //       return null;
+        //   }
+        // }
       },
     },
     scales: {

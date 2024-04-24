@@ -16,7 +16,6 @@ catch(err){
   console.log(err)
 }
 
-/* GET home page. */
 router.get('/adminlogin', function(req, res, next) {
   console.log(req.session)
   res.render('index', { title: 'Express',error:'' });
@@ -95,7 +94,6 @@ router.get('/dashboard',isLoggedIn,isAdmin, function(req, res, next) {
           checkCounts(); // Check if all counts are obtained
       });
 
-      // Query to get customer count
       connection.query('SELECT COUNT(*) as customerCount FROM CUSTOMER', function(error, results, fields) {
           if (error) {
               console.error('Error getting customer count:', error);
@@ -107,17 +105,15 @@ router.get('/dashboard',isLoggedIn,isAdmin, function(req, res, next) {
           checkCounts(); // Check if all counts are obtained
       });
 
-      // Function to check if all counts are obtained and render the response
       function checkCounts() {
           if (employeeCount !== undefined && productCount !== undefined && customerCount !== undefined) {
-              // All counts obtained, render the response
               res.render('dashboard', { employeeCount: employeeCount, productCount: productCount, customerCount: customerCount });
           }
       }
   });
 });
 
-router.get('/counter', function(req,res,next){
+router.get('/counter',isLoggedIn, function(req,res,next){
   res.render('counter',{empid:req.session.userId})
 })
 router.get('/products',isLoggedIn,isAdmin,function(req,res){
@@ -192,11 +188,9 @@ router.post('/addproduct', function(req, res) {
       });
   });
 });
-// In your routes file (e.g., index.js)
 router.post('/addCategory', function(req, res, next) {
   const categoryName = req.body.categoryName;
 
-  // Retrieve the last category ID from the database
   connection.query('SELECT CATEGORY_ID FROM CATEGORY ORDER BY CATEGORY_ID DESC LIMIT 1', function(error, results, fields) {
       if (error) {
           console.error('Error retrieving last category ID:', error);
@@ -212,7 +206,6 @@ router.post('/addCategory', function(req, res, next) {
       // Increment the last category ID to generate the new category ID
       let nextCategoryId = 'C' + (parseInt(lastCategoryId.substr(1)) + 1);
 
-      // Perform database operation to insert the new category
       connection.query('INSERT INTO CATEGORY (CATEGORY_ID, CATEGORY_NAME) VALUES (?, ?)', [nextCategoryId, categoryName], function(error, results, fields) {
           if (error) {
               console.error('Error adding category to database:', error);
@@ -245,7 +238,6 @@ router.get('/custID',function(req,res){
 router.post('/deleteProduct', function(req, res, next) {
   const productId = req.body.productId; // Assuming the product ID is sent in the request body
 
-  // Perform the deletion query
   const sql = "DELETE FROM PRODUCT WHERE PRODUCT_ID = ?";
   connection.query(sql, [productId], function(error, results, fields) {
       if (error) {
